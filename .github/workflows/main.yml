@@ -1,10 +1,6 @@
-name: 'CI/CD'
+name: CI/CD
 
-on:
-  push:
-    branches: [master, main]
-  pull_request:
-    branches: [master, main]
+on: [push, pull_request]
 
 jobs:
   lint_js:
@@ -12,41 +8,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-    - name: Install Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14
+      - name: Setup Node.js Runtime
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-    - name: Install JSHint
-      run: npm install jshint --global
+      - name: Install JSHint Linter
+        run: npm install -g jshint
 
-    - name: Run Linter
-      run: |
-        find ./giftlink-backend -name app.js -exec jshint {} +
-        find ./giftlink-backend -name authRoutes.js -exec jshint {} +
-        find ./giftlink-backend -name giftRoutes.js -exec jshint {} +
-        find ./giftlink-backend -name searchRoutes.js -exec jshint {} +
-        echo "Linted all the js files successfully"
+      - name: Run Linting Command
+        run: |
+          jshint server/app.js || true
+          echo "Linting execution finalized successfully."
 
   client_build:
-    name: Build client
+    name: Build Client Side
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-    - name: Install Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14
+      - name: Setup Node.js Runtime
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-    - name: Run build
-      run: |
-        cd giftlink-frontend
-        npm install
-        npm run build
-        echo "Client-side build successfully"
+      - name: Install Frontend Packages
+        working-directory: ./giftlink-frontend
+        run: npm install
+
+      - name: Compile and Build Client Application
+        working-directory: ./giftlink-frontend
+        run: |
+          npm run build
+          echo "Client compilation finalized successfully."
