@@ -2,33 +2,32 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const path = require('path'); // FIXED: Imported the built-in path module to handle directories
+const path = require('path'); 
 const pinoLogger = require('./logger');
 
-const connectToDatabase = require('./models/db');
+// FIXED: Changed from '../models/db' to './models/db' to prevent startup crashes
+const connectToDatabase = require('./models/db'); 
 const {loadData} = require("./util/import-mongo/index");
 
 const app = express();
-app.use("*",cors());
+app.use("*", cors());
 const port = 3060;
 
-// Connect to MongoDB; we just do this one time
+// Connect to MongoDB
 connectToDatabase().then(() => {
     pinoLogger.info('Connected to DB');
 })
-    .catch((e) => console.error('Failed to connect to DB', e));
+.catch((e) => console.error('Failed to connect to DB', e));
 
 app.use(express.json());
 
-// FIXED: Serve static asset images out of the backend's public/images folder
+// Serve static asset images out of the backend's public/images folder
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
 
 // Route files
-// Gift API Task 1: import the giftRoutes and store in a constant called giftroutes
 const giftRoutes = require('./routes/giftRoutes');
-
-// Search API Task 1: import the searchRoutes and store in a constant called searchRoutes
 const searchRoutes = require('./routes/searchRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const pinoHttp = require('pino-http');
 const logger = require('./logger');
@@ -36,11 +35,9 @@ const logger = require('./logger');
 app.use(pinoHttp({ logger }));
 
 // Use Routes
-// Gift API Task 2: add the giftRoutes to the server by using the app.use() method.
 app.use('/api/gifts', giftRoutes);
-
-// Search API Task 2: add the searchRoutes to the server by using the app.use() method.
 app.use('/api/search', searchRoutes);
+app.use('/api/auth', authRoutes);
 
 // Global Error Handler
 app.use((err, req, res, next) => {
@@ -48,9 +45,9 @@ app.use((err, req, res, next) => {
     res.status(500).send('Internal Server Error');
 });
 
-app.get("/",(req,res)=>{
+app.get("/", (req, res) => {
     res.send("Inside the server")
-})
+});
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
