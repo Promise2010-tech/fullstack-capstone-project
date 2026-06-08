@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import './Profile.css'
+import './Profile.css';
 import { urlConfig } from '../../config';
 import { useAppContext } from '../../context/AuthContext';
 
@@ -62,22 +62,20 @@ const Profile = () => {
         return;
       }
 
+      const payload = { ...updatedDetails };
       const response = await fetch(`${urlConfig.backendUrl}/api/auth/update`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
           "Authorization": `Bearer ${authtoken}`,
           "Content-Type": "application/json",
           "Email": email,
         },
-        body: JSON.stringify({
-          name: updatedDetails.name
-        })
+        body: JSON.stringify(payload),
       });
 
       if (response.ok) {
         setUserName(updatedDetails.name);
         sessionStorage.setItem("name", updatedDetails.name);
-        
         setUserDetails(updatedDetails);
         setEditMode(false);
         setChanged("Name Changed Successfully!");
