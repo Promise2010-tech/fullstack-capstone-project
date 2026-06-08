@@ -1,16 +1,62 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { urlConfig } from '../../config';
+import { useAppContext } from '../../context/AuthContext';
 import './LoginPage.css';
 
 function LoginPage() {
     // State variables for form inputs
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    
+    // Step 2 Naming Standard: State for handling error messages
+    const [showerr, setShowerr] = useState('');
+
+    // Local hook routing context properties
+    const navigate = useNavigate();
+    const { setIsLoggedIn } = useAppContext();
 
     // Form submission action handler
     const handleLogin = async (e) => {
         if (e) e.preventDefault(); // Prevents browser from reloading the page
-        console.log("Inside handleLogin");
-        console.log(`Payload - Email: ${email}`);
+        setShowerr(''); // Reset any existing errors
+
+        try {
+            // Step 1: Implement API call targeting the login route
+            const response = await fetch(`${urlConfig.backendUrl}/api/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+
+            // Step 2: Access data coming from fetch API
+            const json = await response.json();
+
+            if (response.ok && json.authtoken) {
+                // Set user tracking details inside browser session memory
+                sessionStorage.setItem('auth-token', json.authtoken);
+                sessionStorage.setItem('name', json.userName);
+                sessionStorage.setItem('email', json.userEmail);
+                
+                // Flip application authentication state globally
+                setIsLoggedIn(true);
+                
+                // Route user forward onto primary dashboard landing panel
+                navigate('/app');
+            } else {
+                // Set an error message if credentials validation fails
+                setShowerr(json.error || "Invalid Email or Password");
+            }
+
+        } catch (e) {
+            console.log("Error fetching details: " + e.message);
+            setShowerr("Cannot connect to server. Ensure your backend application is online.");
+        }
     };
 
     return (
@@ -19,6 +65,9 @@ function LoginPage() {
                 <div className="col-md-6 col-lg-4">
                     <div className="login-card p-4 border rounded">
                         <h2 className="text-center mb-4 font-weight-bold">Login</h2>
+                        
+                        {/* Display inline validation error message block to end user if present */}
+                        {showerr && <div className="text-danger mb-3">{showerr}</div>}
                         
                         <form onSubmit={handleLogin}>
                             {/* Email Input Field */}
