@@ -1,26 +1,94 @@
-/* Task 1: Style the search input field */
-.search-input {
-    /* Insert specific CSS properties here */
+/* Overall page container layout styling (Task 10) */
+.search-container {
+    padding: 2rem 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* Task 2: Style the search button */
-.search-button {
-    /* Insert specific CSS properties here */
+/* Style the search input field container and text input (Task 1) */
+.search-box .form-control {
+    width: 75%;
+    margin-right: 1rem;
+    display: inline-block;
+    vertical-align: middle;
 }
 
-/* Task 3: Customize dropdown filters */
-.dropdown-filter {
-    /* Insert specific CSS properties here */
+/* Style the search button (Task 2) */
+.search-box .btn-primary {
+    width: 20%;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 0.375rem 0.75rem;
+    vertical-align: middle;
+    transition: background-color 0.2s ease-in-out;
 }
 
-/* Task 4: Style the age range slider */
-.age-range-slider {
-    /* Insert specific CSS properties here */
+.search-box .btn-primary:hover {
+    background-color: #0056b3;
 }
 
-/* Task 5: Enhance search results cards appearance */
-.search-results-card {
-    /* Insert specific CSS properties here */
+/* Customize dropdown filters for category and condition (Task 3) */
+.search-box select.form-control {
+    margin-bottom: 1rem;
+    border: 1px solid #ced4da;
+    width: 100%; /* Overrides the 75% rule specifically for layout dropdown columns */
 }
 
-/* Additional placeholders for tasks 6 to 10 */
+/* Style the age range slider (Task 4) */
+.form-control-range {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+/* Enhance search results cards appearance & Hover Effect (Task 5 & Task 7) */
+.search-results .card {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    border: none;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* Apply a hover effect to the search results cards (Task 7) */
+.search-results .card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Ensure images in search results are displayed appropriately (Task 8) */
+.search-results .card-img-top {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Style the "No products found" alert message (Task 6) */
+.alert-info {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 0.75rem 1.25rem;
+    margin-top: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+
+/* Create a responsive layout for search results on various devices (Task 9) */
+@media (max-width: 768px) {
+    .search-box .form-control {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .search-box .btn-primary {
+        width: 100%;
+    }
+    
+    .search-results .card-img-top {
+        height: 180px;
+    }
+    
+    .search-results .card-title {
+        font-size: 1.1rem;
+    }
+}

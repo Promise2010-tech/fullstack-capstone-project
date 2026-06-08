@@ -3,8 +3,9 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import MainPage from './components/MainPage/MainPage';
 import LoginPage from './components/LoginPage/LoginPage';
 import RegisterPage from './components/RegisterPage/RegisterPage';
-// HINT TASK 8: Import the DetailsPage component
 import DetailsPage from './components/DetailsPage/DetailsPage'; 
+// TASK 1 HINT: Import your SearchPage component
+import SearchPage from './components/SearchPage/SearchPage'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
@@ -19,8 +20,9 @@ function App() {
           <Route path="/app" element={<MainPage />} />
           <Route path="/app/login" element={<LoginPage/>} />
           <Route path="/app/register" element={<RegisterPage />} />
-          {/* HINT TASK 8: Dynamic product entry profile matching endpoint line */}
           <Route path="/app/product/:productId" element={<DetailsPage/>} />
+          {/* TASK 1 HINT: Add the search page path route mapping layout */}
+          <Route path="/app/search" element={<SearchPage />} />
         </Routes>
         </>
   );
